@@ -1,0 +1,327 @@
+:root {
+  --fl-yellow: #ffc107;
+  --fl-yellow-hover: #ffb300;
+  --fl-charcoal: #212121;
+  /* Light theme defaults */
+  --fl-bg: #f6f7fb;
+  --fl-surface: #ffffff;
+  --fl-surface-2: #fff3cd;
+  --fl-border: rgba(0, 0, 0, 0.08);
+  --fl-text: rgba(33, 33, 33, 0.96);
+  --fl-text-dim: rgba(33, 33, 33, 0.72);
+  --fl-link: #8a6d00;
+}
+
+/* Dark theme (Django color switch) */
+html[data-theme="dark"] {
+  --fl-bg: #0f1115;
+  --fl-surface: #171a21;
+  --fl-surface-2: #1f2430;
+  --fl-border: rgba(255, 255, 255, 0.08);
+  --fl-text: rgba(255, 255, 255, 0.92);
+  --fl-text-dim: rgba(255, 255, 255, 0.72);
+  --fl-link: #ffd24d;
+}
+
+/* Header */
+#header {
+  background: var(--fl-yellow);
+  color: var(--fl-charcoal);
+}
+
+#header a:link,
+#header a:visited {
+  color: var(--fl-charcoal);
+}
+
+#site-name a {
+  font-weight: 800;
+}
+
+#header #user-tools,
+#header #user-tools a {
+  color: var(--fl-charcoal) !important;
+}
+
+#header #user-tools {
+  font-weight: 700;
+}
+
+/* Keep Django theme toggle visible but aligned with FloatLink header */
+#header .theme-toggle {
+  margin-left: 10px;
+}
+
+#header .theme-toggle svg {
+  color: var(--fl-charcoal);
+}
+
+/* Sidebar branding (only affects left menu) */
+#nav-sidebar .module caption,
+#nav-sidebar .inline-group h2 {
+  background: var(--fl-yellow);
+  color: var(--fl-charcoal);
+}
+
+#nav-sidebar .module caption a:link,
+#nav-sidebar .module caption a:visited {
+  color: var(--fl-charcoal);
+}
+
+/* Modern FloatLink sidebar (custom nav_sidebar.html) */
+#nav-sidebar .fl-nav {
+  padding: 14px 12px;
+}
+
+#nav-sidebar .fl-nav-title {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin: 6px 8px 10px;
+}
+
+#nav-sidebar .fl-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+#nav-sidebar .fl-nav-item {
+  margin: 6px 0;
+}
+
+#nav-sidebar .fl-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+#nav-sidebar .fl-nav-link:hover {
+  background: rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+}
+
+html[data-theme="dark"] #nav-sidebar .fl-nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+#nav-sidebar .fl-nav-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+}
+
+#nav-sidebar .fl-nav-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+#nav-sidebar .fl-nav-text {
+  font-weight: 700;
+}
+
+#nav-sidebar .fl-nav-item.is-active .fl-nav-link {
+  background: rgba(255, 193, 7, 0.22);
+}
+
+#nav-sidebar .fl-nav-item.is-active .fl-nav-link::after {
+  content: '';
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 18px;
+  border-radius: 3px;
+  background: var(--fl-yellow);
+}
+
+/* Dashboard analytics cards */
+.fl-dash-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 14px;
+}
+
+.fl-dash-card {
+  grid-column: span 4;
+  background: var(--fl-surface);
+  border: 1px solid var(--fl-border);
+  border-left: 6px solid var(--fl-yellow);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+@media (max-width: 1100px) {
+  .fl-dash-card {
+    grid-column: span 12;
+  }
+}
+
+.fl-dash-card-title {
+  font-weight: 900;
+  color: var(--fl-charcoal);
+  margin-bottom: 8px;
+}
+
+.fl-dash-card-metric {
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--fl-charcoal);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.fl-dash-card-sub {
+  color: rgba(33, 33, 33, 0.75);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+html[data-theme="dark"] .fl-dash-card-title,
+html[data-theme="dark"] .fl-dash-card-metric {
+  color: #fff;
+}
+
+html[data-theme="dark"] .fl-dash-card-sub {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.fl-dash-kv {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+  margin: 8px 0 12px;
+}
+
+.fl-dash-kv > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 193, 7, 0.12);
+}
+
+.fl-dash-kv span {
+  font-weight: 800;
+  color: var(--fl-charcoal);
+}
+
+html[data-theme="dark"] .fl-dash-kv span {
+  color: #fff;
+}
+
+.fl-dash-card-link a {
+  font-weight: 900;
+}
+
+.fl-admin-link {
+  display: inline-block;
+  margin-left: 12px;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--fl-charcoal) !important;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.fl-admin-link:hover {
+  background: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+}
+
+/* Buttons */
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+a.button {
+  background: var(--fl-yellow);
+  color: var(--fl-charcoal);
+  border: 1px solid var(--fl-yellow);
+  border-radius: 12px;
+  font-weight: 800;
+}
+
+.button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.submit-row input:hover,
+a.button:hover {
+  background: var(--fl-yellow-hover);
+  border-color: var(--fl-yellow-hover);
+  color: var(--fl-charcoal);
+}
+
+.button.default,
+input[type=submit].default {
+  background: var(--fl-charcoal);
+  border-color: var(--fl-charcoal);
+  color: #fff;
+}
+
+.button.default:hover,
+input[type=submit].default:hover {
+  opacity: 0.9;
+}
+
+/* Links */
+a:link,
+a:visited {
+  color: var(--fl-link);
+}
+
+a:hover {
+  opacity: 0.85;
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+  background: var(--fl-surface-2);
+  color: var(--fl-charcoal);
+}
+
+div.breadcrumbs a {
+  color: var(--fl-link);
+}
+
+/* Form elements */
+select,
+textarea,
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=number] {
+  border-radius: 12px;
+}
+
+/* Hide “Add” UI everywhere (we’ll also enforce permissions server-side) */
+.object-tools,
+.object-tools a.addlink,
+.object-tools .addlink,
+a.addlink,
+li.addlink,
+.addlink {
+  display: none !important;
+}
+
+/* Remove right-side filters panel (use left nav only) */
+#content-related,
+#changelist-filter {
+  display: none !important;
+}
+
+#content-main {
+  width: 100% !important;
+}

@@ -1,0 +1,104 @@
+:root {
+  --fl-yellow: #ffc107;
+  --fl-yellow-hover: #ffb300;
+  --fl-charcoal: #212121;
+}
+
+body {
+  background: #ffffff;
+  color: var(--fl-charcoal);
+}
+
+.navbar-fl {
+  background: var(--fl-yellow);
+}
+
+.navbar-fl .navbar-brand,
+.navbar-fl .nav-link {
+  color: var(--fl-charcoal);
+  font-weight: 600;
+}
+
+.navbar-fl .nav-link:hover {
+  opacity: 0.85;
+}
+
+.btn-fl {
+  background: var(--fl-yellow);
+  border: 1px solid var(--fl-yellow);
+  color: var(--fl-charcoal);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 700;
+}
+
+.btn-fl:hover {
+  background: var(--fl-yellow-hover);
+  border-color: var(--fl-yellow-hover);
+  color: var(--fl-charcoal);
+}
+
+.btn-fl-outline {
+  background: transparent;
+  border: 1px solid var(--fl-yellow);
+  color: var(--fl-charcoal);
+  border-radius: 12px;
+  padding: 10px 18px;
+  font-weight: 700;
+}
+
+.btn-fl-outline:hover {
+  background: rgba(255, 193, 7, 0.15);
+}
+
+.card-fl {
+  border: 0;
+  border-left: 6px solid var(--fl-yellow);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.55), rgba(255, 255, 255, 1));
+}
+
+.fl-chat-box {
+  height: 320px;
+  overflow: auto;
+  background: #fff;
+}
+
+.fl-chat-row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.fl-chat-row.me {
+  justify-content: flex-end;
+}
+
+.fl-chat-bubble {
+  max-width: 75%;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: #f7f7f7;
+}
+
+.fl-chat-row.me .fl-chat-bubble {
+  background: rgba(255, 193, 7, 0.18);
+  border-color: rgba(255, 193, 7, 0.35);
+}
+
+.fl-chat-meta {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 4px;
+}
+
+.fl-chat-attachment {
+  display: block;
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 8px;
+}

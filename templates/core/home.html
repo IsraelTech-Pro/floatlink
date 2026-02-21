@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero py-5 mb-4 rounded-4">
+  <div class="container py-4">
+    <div class="row align-items-center">
+      <div class="col-lg-7">
+        <h1 class="display-5 fw-bold text-dark">FloatLink Ghana</h1>
+        <p class="lead text-dark-50 mb-4">Request emergency float, let FloatLink staff process it, and track every transaction with clarity.</p>
+        <div class="d-flex gap-2 flex-wrap">
+          {% if request.user.is_authenticated %}
+            <a class="btn btn-fl" href="{% url 'core:dashboard' %}">Go to Dashboard</a>
+            <a class="btn btn-fl-outline" href="{% url 'agents:logout' %}">Logout</a>
+          {% else %}
+            <a class="btn btn-fl" href="{% url 'agents:register' %}">Create Agent Account</a>
+            <a class="btn btn-fl-outline" href="{% url 'agents:login' %}">Login</a>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col-lg-5 mt-4 mt-lg-0">
+        <div class="card card-fl">
+          <div class="card-body">
+            <div class="d-flex align-items-center justify-content-between">
+              <div>
+                <div class="text-muted small">Platform Theme</div>
+                <div class="fw-semibold">Yellow + White Premium</div>
+              </div>
+              <div class="badge bg-dark">MVP</div>
+            </div>
+            <hr>
+            <div class="row g-3">
+              <div class="col-12">
+                <div class="p-3 bg-light rounded-4">
+                  <div class="fw-semibold">Fast matching</div>
+                  <div class="text-muted small">Text-based location prioritization</div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="p-3 bg-light rounded-4">
+                  <div class="fw-semibold">Secure tracking</div>
+                  <div class="text-muted small">All requests and transactions recorded</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row g-3">
+    <div class="col-md-4">
+        <div class="card card-fl h-100">
+          <div class="card-body">
+            <div class="fw-bold">Request Float</div>
+            <div class="text-muted">Create a request and send it to FloatLink for processing.</div>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-fl h-100">
+          <div class="card-body">
+            <div class="fw-bold">Staff Accept & Process</div>
+            <div class="text-muted">FloatLink staff accepts and processes your request.</div>
+          </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-fl h-100">
+          <div class="card-body">
+            <div class="fw-bold">Confirm Completion</div>
+            <div class="text-muted">You confirm completion to finalize the transaction.</div>
+          </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

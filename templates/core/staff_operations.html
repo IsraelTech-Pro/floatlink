@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load dict_extras %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Staff Operations</h2>
+      <div class="text-muted">Process incoming float requests.</div>
+    </div>
+    <a class="btn btn-fl-outline" href="{% url 'core:staff_analytics' %}">Analytics</a>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-4">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Pending</div>
+        <div class="fs-4 fw-bold">{{ counts.PENDING }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Accepted</div>
+        <div class="fs-4 fw-bold">{{ counts.ACCEPTED }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Waiting for confirmation</div>
+        <div class="fs-4 fw-bold">{{ counts.ADMIN_COMPLETED }}</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-12">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Pending</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Requester</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Created</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in pending %}
+                  <tr>
+                    <td>#{{ r.id }}</td>
+                    <td>
+                      <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                      <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                    </td>
+                    <td>{{ r.get_request_type_display }}</td>
+                    {% with rt=request_totals|get_item:r.id %}
+                      <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                    {% endwith %}
+                    <td class="text-muted">{{ r.created_at }}</td>
+                    <td class="text-end d-flex gap-2 justify-content-end">
+                      <form method="post" action="{% url 'float_requests:accept' r.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-fl" type="submit">Accept</button>
+                      </form>
+                      <form method="post" action="{% url 'float_requests:decline' r.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-fl-outline" type="submit">Decline</button>
+                      </form>
+                      <a class="btn btn-sm btn-fl-outline" href="{% url 'float_requests:detail' r.id %}">Open</a>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="6" class="text-muted">No pending requests.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Accepted / In progress</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Requester</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Handled by</th>
+                  <th>Accepted</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in accepted %}
+                  <tr>
+                    <td>#{{ r.id }}</td>
+                    <td>
+                      <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                      <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                    </td>
+                    <td>{{ r.get_request_type_display }}</td>
+                    {% with rt=request_totals|get_item:r.id %}
+                      <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                    {% endwith %}
+                    <td>
+                      {% if r.accepted_by %}
+                        <div class="fw-semibold">{{ r.accepted_by.get_username }}</div>
+                        {% with ha=handled_agents|get_item:r.accepted_by.id %}
+                          {% if ha %}
+                            <div class="text-muted small">Acct: {{ ha.vendor_number|default:"-" }}{% if ha.business_name %} · {{ ha.business_name }}{% endif %}</div>
+                          {% endif %}
+                        {% endwith %}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td class="text-muted">{{ r.accepted_at }}</td>
+                    <td class="text-end d-flex gap-2 justify-content-end">
+                      <form method="post" action="{% url 'float_requests:complete' r.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-sm btn-fl" type="submit">Mark Done</button>
+                      </form>
+                      <a class="btn btn-sm btn-fl-outline" href="{% url 'float_requests:detail' r.id %}">Open</a>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="7" class="text-muted">No accepted requests.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Waiting for agent confirmation</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Requester</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>Handled by</th>
+                  <th>Done at</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in admin_completed %}
+                  <tr>
+                    <td>#{{ r.id }}</td>
+                    <td>
+                      <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                      <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                    </td>
+                    <td>{{ r.get_request_type_display }}</td>
+                    {% with rt=request_totals|get_item:r.id %}
+                      <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                    {% endwith %}
+                    <td>
+                      {% if r.accepted_by %}
+                        <div class="fw-semibold">{{ r.accepted_by.get_username }}</div>
+                        {% with ha=handled_agents|get_item:r.accepted_by.id %}
+                          {% if ha %}
+                            <div class="text-muted small">Acct: {{ ha.vendor_number|default:"-" }}{% if ha.business_name %} · {{ ha.business_name }}{% endif %}</div>
+                          {% endif %}
+                        {% endwith %}
+                      {% else %}
+                        -
+                      {% endif %}
+                    </td>
+                    <td class="text-muted">{{ r.admin_completed_at }}</td>
+                    <td class="text-end">
+                      <a class="btn btn-sm btn-fl-outline" href="{% url 'float_requests:detail' r.id %}">Open</a>
+                    </td>
+                  </tr>
+                {% empty %}
+                  <tr><td colspan="7" class="text-muted">No requests waiting for confirmation.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

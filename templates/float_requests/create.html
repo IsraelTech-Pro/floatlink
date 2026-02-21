@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">Request Float</h2>
+  <div class="text-muted mb-4">Choose E-cash or Physical cash. FloatLink staff will accept and process your request.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <form method="post" class="row g-3" id="floatRequestForm">
+        {% csrf_token %}
+        <div class="col-md-6">
+          <label class="form-label">Request type</label>
+          {{ form.request_type }}
+          <div class="form-text">Physical cash requests require GPS.</div>
+          {% if form.request_type.errors %}<div class="text-danger small">{{ form.request_type.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Amount (GHS)</label>
+          {{ form.amount }}
+          {% if form.amount.errors %}<div class="text-danger small">{{ form.amount.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-12">
+          <div id="chargePreview" class="alert alert-warning mb-0" style="display:none;"></div>
+        </div>
+
+        {{ form.requester_latitude }}
+        {{ form.requester_longitude }}
+
+        <div class="col-12">
+          <div id="gpsStatus" class="text-muted small"></div>
+        </div>
+
+        <div class="col-12">
+          <button class="btn btn-fl" type="submit">Submit Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

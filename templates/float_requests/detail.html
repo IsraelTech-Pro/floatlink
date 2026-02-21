@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">Request Detail</h2>
+  <div class="text-muted mb-4">Track status and take actions based on your role.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <div class="row g-3 align-items-center">
+        <div class="col-md-6">
+          <div class="text-muted small">Amount</div>
+          {% if is_staff %}
+            <div class="fs-3 fw-bold">GHS {{ total_amount }}</div>
+            <div class="text-muted small">Includes fee: GHS {{ service_fee }}</div>
+          {% else %}
+            <div class="fs-3 fw-bold">GHS {{ fr.amount }}</div>
+            <div class="text-muted small">Service fee: GHS {{ service_fee }} · Total: GHS {{ total_amount }}</div>
+          {% endif %}
+        </div>
+        <div class="col-md-6 text-md-end">
+          <div class="text-muted small">Status</div>
+          <div><span class="badge bg-light text-dark border">{{ fr.get_status_display }}</span></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="text-muted small">Requester</div>
+          <div class="fw-semibold">{{ fr.requesting_agent.user.username }}</div>
+          <div class="text-muted small">Acct: {{ fr.requesting_agent.vendor_number|default:"-" }}{% if fr.requesting_agent.business_name %} · {{ fr.requesting_agent.business_name }}{% endif %}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">Handled by</div>
+          <div class="fw-semibold">{% if fr.accepted_by %}{{ fr.accepted_by.get_username }}{% else %}-{% endif %}</div>
+          {% if handled_agent %}
+            <div class="text-muted small">Acct: {{ handled_agent.vendor_number|default:"-" }}{% if handled_agent.business_name %} · {{ handled_agent.business_name }}{% endif %}</div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap mt-4">
+
+        {% if is_staff and fr.status == 'PENDING' %}
+          <form method="post" action="{% url 'float_requests:accept' fr.id %}">
+            {% csrf_token %}
+            <button class="btn btn-fl" type="submit">Accept</button>
+          </form>
+          <form method="post" action="{% url 'float_requests:decline' fr.id %}">
+            {% csrf_token %}
+            <button class="btn btn-fl-outline" type="submit">Decline</button>
+          </form>
+        {% endif %}
+
+        {% if is_staff and fr.status == 'ACCEPTED' %}
+          <form method="post" action="{% url 'float_requests:complete' fr.id %}">
+            {% csrf_token %}
+            <button class="btn btn-fl" type="submit">Mark Done</button>
+          </form>
+        {% endif %}
+
+        {% if is_requester and fr.status == 'ADMIN_COMPLETED' %}
+          <form method="post" action="{% url 'float_requests:complete' fr.id %}">
+            {% csrf_token %}
+            <button class="btn btn-fl" type="submit">Confirm Completion</button>
+          </form>
+        {% endif %}
+
+        {% if is_requester and fr.status == 'PENDING' %}
+          <form method="post" action="{% url 'float_requests:cancel' fr.id %}">
+            {% csrf_token %}
+            <button class="btn btn-dark" type="submit">Cancel</button>
+          </form>
+        {% endif %}
+
+        <a class="btn btn-fl-outline" href="{% url 'float_requests:my' %}">Back</a>
+      </div>
+
+      {% if fr.status == 'ACCEPTED' or fr.status == 'ADMIN_COMPLETED' or fr.status == 'COMPLETED' %}
+        <hr>
+        <div class="d-flex align-items-center justify-content-between mb-2">
+          <div class="fw-semibold">Chat</div>
+          <a class="btn btn-sm btn-fl-outline" href="{% url 'float_requests:chat_history' %}" title="Chat history">History</a>
+        </div>
+        <div id="chatBox" data-request-id="{{ fr.id }}" data-current-user-id="{{ request.user.id }}" class="fl-chat-box border rounded p-3"></div>
+        {% if is_requester or is_staff %}
+          <form id="chatForm" class="d-flex gap-2 mt-2 align-items-center" enctype="multipart/form-data">
+            <input id="chatMessage" class="form-control" placeholder="Type a message..." autocomplete="off">
+            <input id="chatAttachment" type="file" class="d-none" accept="image/*">
+            <label for="chatAttachment" class="btn btn-fl-outline" title="Upload">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="17 8 12 3 7 8" />
+                <line x1="12" y1="3" x2="12" y2="15" />
+              </svg>
+            </label>
+            <span id="chatFileName" class="text-muted small text-truncate" style="max-width: 160px;"></span>
+            <button class="btn btn-fl" type="submit">Send</button>
+          </form>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

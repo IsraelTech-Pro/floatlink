@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Staff Analytics</h2>
+      <div class="text-muted">High level metrics for requests and transactions.</div>
+    </div>
+    <a class="btn btn-fl-outline" href="{% url 'core:staff_operations' %}">Operations</a>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Total requests</div>
+        <div class="fs-4 fw-bold">{{ fr.total }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Pending</div>
+        <div class="fs-4 fw-bold">{{ fr.PENDING }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Accepted</div>
+        <div class="fs-4 fw-bold">{{ fr.ACCEPTED }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Admin completed</div>
+        <div class="fs-4 fw-bold">{{ fr.ADMIN_COMPLETED }}</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Completed</div>
+        <div class="fs-4 fw-bold">{{ fr.COMPLETED }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Cancelled</div>
+        <div class="fs-4 fw-bold">{{ fr.CANCELLED }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Declined</div>
+        <div class="fs-4 fw-bold">{{ fr.DECLINED }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Total transactions</div>
+        <div class="fs-4 fw-bold">{{ tx.total }}</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Transactions created</div>
+        <div class="fs-4 fw-bold">{{ tx.CREATED }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Transactions paid</div>
+        <div class="fs-4 fw-bold">{{ tx.PAID }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Transactions failed</div>
+        <div class="fs-4 fw-bold">{{ tx.FAILED }}</div>
+      </div></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static float_request_admin_stats %}
+
+{% block content %}
+  <div id="content-main">
+    {% admin_dashboard_stats as stats %}
+
+    <div class="fl-dash-grid">
+      <div class="fl-dash-card">
+        <div class="fl-dash-card-title">Users</div>
+        <div class="fl-dash-card-metric">{{ stats.users_total }}</div>
+        <div class="fl-dash-card-sub">
+          Agents: {{ stats.agents_total }}
+          &nbsp;|&nbsp; Verified: {{ stats.agents_verified }}
+          &nbsp;|&nbsp; Active: {{ stats.agents_active }}
+        </div>
+        <div class="fl-dash-card-link"><a href="{% url 'admin:auth_user_changelist' %}">Manage users</a></div>
+      </div>
+
+      <div class="fl-dash-card">
+        <div class="fl-dash-card-title">Float Requests</div>
+        <div class="fl-dash-card-metric">{{ stats.float_requests.total }}</div>
+        <div class="fl-dash-kv">
+          <div><span>Pending</span><a href="{% url 'admin:float_requests_floatrequest_changelist' %}?status__exact=PENDING">{{ stats.float_requests.PENDING }}</a></div>
+          <div><span>Accepted</span><a href="{% url 'admin:float_requests_floatrequest_changelist' %}?status__exact=ACCEPTED">{{ stats.float_requests.ACCEPTED }}</a></div>
+          <div><span>Admin completed</span><a href="{% url 'admin:float_requests_floatrequest_changelist' %}?status__exact=ADMIN_COMPLETED">{{ stats.float_requests.ADMIN_COMPLETED }}</a></div>
+          <div><span>Completed</span><a href="{% url 'admin:float_requests_floatrequest_changelist' %}?status__exact=COMPLETED">{{ stats.float_requests.COMPLETED }}</a></div>
+          <div><span>Cancelled</span><a href="{% url 'admin:float_requests_floatrequest_changelist' %}?status__exact=CANCELLED">{{ stats.float_requests.CANCELLED }}</a></div>
+          <div><span>Declined</span><a href="{% url 'admin:float_requests_floatrequest_changelist' %}?status__exact=DECLINED">{{ stats.float_requests.DECLINED }}</a></div>
+        </div>
+        <div class="fl-dash-card-link"><a href="{% url 'admin:float_requests_floatrequest_changelist' %}">Manage requests</a></div>
+      </div>
+
+      <div class="fl-dash-card">
+        <div class="fl-dash-card-title">Transactions</div>
+        <div class="fl-dash-card-metric">{{ stats.transactions.total }}</div>
+        <div class="fl-dash-kv">
+          <div><span>Created</span><a href="{% url 'admin:transactions_transaction_changelist' %}?status__exact=CREATED">{{ stats.transactions.CREATED }}</a></div>
+          <div><span>Paid</span><a href="{% url 'admin:transactions_transaction_changelist' %}?status__exact=PAID">{{ stats.transactions.PAID }}</a></div>
+          <div><span>Failed</span><a href="{% url 'admin:transactions_transaction_changelist' %}?status__exact=FAILED">{{ stats.transactions.FAILED }}</a></div>
+        </div>
+        <div class="fl-dash-card-link"><a href="{% url 'admin:transactions_transaction_changelist' %}">Manage transactions</a></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

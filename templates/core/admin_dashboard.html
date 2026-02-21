@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load dict_extras %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Admin Dashboard</h2>
+      <div class="text-muted">Overview of all float requests.</div>
+    </div>
+    <a class="btn btn-dark" href="/admin/">Open Django Admin</a>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-2">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Pending</div>
+        <div class="fs-4 fw-bold">{{ counts.pending }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Admin completed</div>
+        <div class="fs-4 fw-bold">{{ counts.admin_completed }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Accepted (Ongoing)</div>
+        <div class="fs-4 fw-bold">{{ counts.accepted }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Completed</div>
+        <div class="fs-4 fw-bold">{{ counts.completed }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Cancelled</div>
+        <div class="fs-4 fw-bold">{{ counts.cancelled }}</div>
+      </div></div>
+    </div>
+    <div class="col-md-2">
+      <div class="card card-fl"><div class="card-body">
+        <div class="text-muted small">Declined</div>
+        <div class="fs-4 fw-bold">{{ counts.declined }}</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Ongoing Requests (Accepted / Admin completed)</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Requester</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in ongoing %}
+                <tr>
+                  <td>#{{ r.id }}</td>
+                  <td>{{ r.get_request_type_display }}</td>
+                  <td>
+                    <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                    <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                  </td>
+                  {% with rt=request_totals|get_item:r.id %}
+                    <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                  {% endwith %}
+                  <td><span class="badge bg-light text-dark border">{{ r.get_status_display }}</span></td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="text-muted">No ongoing requests.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Pending Requests</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Requester</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in pending %}
+                <tr>
+                  <td>#{{ r.id }}</td>
+                  <td>{{ r.get_request_type_display }}</td>
+                  <td>
+                    <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                    <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                  </td>
+                  {% with rt=request_totals|get_item:r.id %}
+                    <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                  {% endwith %}
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-muted">No pending requests.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Completed Requests</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Requester</th>
+                  <th>Handled By</th>
+                  <th>Amount</th>
+                  <th>Completed At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in completed %}
+                <tr>
+                  <td>#{{ r.id }}</td>
+                  <td>{{ r.get_request_type_display }}</td>
+                  <td>
+                    <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                    <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                  </td>
+                  <td>
+                    {% if r.accepted_by %}
+                      <div class="fw-semibold">{{ r.accepted_by.get_username }}</div>
+                      {% with ha=handled_agents|get_item:r.accepted_by.id %}
+                        {% if ha %}
+                          <div class="text-muted small">Acct: {{ ha.vendor_number|default:"-" }}{% if ha.business_name %} · {{ ha.business_name }}{% endif %}</div>
+                        {% endif %}
+                      {% endwith %}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  {% with rt=request_totals|get_item:r.id %}
+                    <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                  {% endwith %}
+                  <td class="text-muted">{{ r.completed_at }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-muted">No completed requests.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="fw-semibold mb-2">Uncompleted Requests (Accepted but not completed)</div>
+          <div class="table-responsive">
+            <table class="table align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Type</th>
+                  <th>Requester</th>
+                  <th>Handled By</th>
+                  <th>Amount</th>
+                  <th>Accepted At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for r in uncompleted %}
+                <tr>
+                  <td>#{{ r.id }}</td>
+                  <td>{{ r.get_request_type_display }}</td>
+                  <td>
+                    <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                    <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                  </td>
+                  <td>
+                    {% if r.accepted_by %}
+                      <div class="fw-semibold">{{ r.accepted_by.get_username }}</div>
+                      {% with ha=handled_agents|get_item:r.accepted_by.id %}
+                        {% if ha %}
+                          <div class="text-muted small">Acct: {{ ha.vendor_number|default:"-" }}{% if ha.business_name %} · {{ ha.business_name }}{% endif %}</div>
+                        {% endif %}
+                      {% endwith %}
+                    {% else %}
+                      -
+                    {% endif %}
+                  </td>
+                  {% with rt=request_totals|get_item:r.id %}
+                    <td>GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}</td>
+                  {% endwith %}
+                  <td class="text-muted">{{ r.accepted_at }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-muted">No uncompleted requests.</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

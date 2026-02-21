@@ -1,0 +1,64 @@
+{% load i18n %}
+
+<nav id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
+  {% url 'admin:index' as fl_url_dashboard %}
+  {% url 'admin:auth_user_changelist' as fl_url_users %}
+  {% url 'admin:float_requests_floatrequest_changelist' as fl_url_requests %}
+  {% url 'admin:transactions_transaction_changelist' as fl_url_transactions %}
+
+  <div class="fl-nav">
+    <div class="fl-nav-title">Main Navigation</div>
+
+    <ul class="fl-nav-list">
+      <li class="fl-nav-item {% if request.path == fl_url_dashboard %}is-active{% endif %}">
+        <a class="fl-nav-link" href="{{ fl_url_dashboard }}">
+          <span class="fl-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 10.5 12 3l9 7.5"></path>
+              <path d="M5 10v10h14V10"></path>
+            </svg>
+          </span>
+          <span class="fl-nav-text">Home</span>
+        </a>
+      </li>
+
+      <li class="fl-nav-item {% if request.path|slice:':13' == fl_url_users|slice:':13' %}is-active{% endif %}">
+        <a class="fl-nav-link" href="{{ fl_url_users }}">
+          <span class="fl-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </span>
+          <span class="fl-nav-text">Users</span>
+        </a>
+      </li>
+
+      <li class="fl-nav-item {% if request.path|slice:':24' == fl_url_requests|slice:':24' %}is-active{% endif %}">
+        <a class="fl-nav-link" href="{{ fl_url_requests }}">
+          <span class="fl-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 18h6"></path>
+              <path d="M10 22h4"></path>
+              <path d="M12 2v6"></path>
+              <path d="M7.5 9.5a6 6 0 1 0 9 0"></path>
+            </svg>
+          </span>
+          <span class="fl-nav-text">Float Requests</span>
+        </a>
+      </li>
+
+      <li class="fl-nav-item {% if request.path|slice:':22' == fl_url_transactions|slice:':22' %}is-active{% endif %}">
+        <a class="fl-nav-link" href="{{ fl_url_transactions }}">
+          <span class="fl-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+              <path d="M3 10h18"></path>
+            </svg>
+          </span>
+          <span class="fl-nav-text">Transactions</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

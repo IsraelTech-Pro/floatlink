@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">Create Admin</h2>
+  <div class="text-muted mb-4">Create a new staff/admin account.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <form method="post" class="row g-2">
+        {% csrf_token %}
+
+        <div class="col-md-6">
+          <label class="form-label">Username</label>
+          {{ form.username }}
+          {% if form.username.errors %}<div class="text-danger small">{{ form.username.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          {{ form.email }}
+          {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">First name</label>
+          {{ form.first_name }}
+          {% if form.first_name.errors %}<div class="text-danger small">{{ form.first_name.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Last name</label>
+          {{ form.last_name }}
+          {% if form.last_name.errors %}<div class="text-danger small">{{ form.last_name.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Password</label>
+          {{ form.password1 }}
+          {% if form.password1.errors %}<div class="text-danger small">{{ form.password1.errors }}</div>{% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label">Confirm password</label>
+          {{ form.password2 }}
+          {% if form.password2.errors %}<div class="text-danger small">{{ form.password2.errors }}</div>{% endif %}
+        </div>
+
+        {% if form.make_superuser %}
+          <div class="col-12">
+            <div class="form-check">
+              {{ form.make_superuser }}
+              <label class="form-check-label">Make superuser</label>
+            </div>
+            {% if form.make_superuser.errors %}<div class="text-danger small">{{ form.make_superuser.errors }}</div>{% endif %}
+          </div>
+        {% endif %}
+
+        <div class="col-12 d-flex gap-2 mt-2">
+          <button class="btn btn-fl" type="submit">Create admin</button>
+          <a class="btn btn-fl-outline" href="{% url 'core:admin_dashboard' %}">Back</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">My Profile</h2>
+  <div class="text-muted mb-4">Your agent details.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <div><span class="text-muted">Username:</span> <span class="fw-semibold">{{ request.user.username }}</span></div>
+      <div class="mt-2"><span class="text-muted">Name:</span> <span class="fw-semibold">{{ request.user.first_name }} {{ request.user.last_name }}</span></div>
+      <div class="mt-2"><span class="text-muted">Phone:</span> <span class="fw-semibold">{{ agent.phone_number|default:"-" }}</span></div>
+      <div class="mt-2"><span class="text-muted">Location:</span> <span class="fw-semibold">{{ agent.location|default:"-" }}</span></div>
+      <div class="mt-2"><span class="text-muted">Vendor number:</span> <span class="fw-semibold">{{ agent.vendor_number|default:"-" }}</span></div>
+      <div class="mt-2"><span class="text-muted">Business name:</span> <span class="fw-semibold">{{ agent.business_name|default:"-" }}</span></div>
+      <div class="mt-2"><span class="text-muted">Verified:</span>
+        {% if agent.is_verified %}
+          <span class="badge bg-success">Yes</span>
+        {% else %}
+          <span class="badge bg-secondary">No</span>
+        {% endif %}
+      </div>
+
+      <hr>
+
+      <form method="post" class="row g-2">
+        {% csrf_token %}
+        <div class="col-md-6">
+          <label class="form-label">First name</label>
+          {{ user_form.first_name }}
+          {% if user_form.first_name.errors %}<div class="text-danger small">{{ user_form.first_name.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Last name</label>
+          {{ user_form.last_name }}
+          {% if user_form.last_name.errors %}<div class="text-danger small">{{ user_form.last_name.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Phone</label>
+          {{ form.phone_number }}
+          {% if form.phone_number.errors %}<div class="text-danger small">{{ form.phone_number.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Location</label>
+          {{ form.location }}
+          {% if form.location.errors %}<div class="text-danger small">{{ form.location.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Vendor number</label>
+          {{ form.vendor_number }}
+          {% if form.vendor_number.errors %}<div class="text-danger small">{{ form.vendor_number.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Business name</label>
+          {{ form.business_name }}
+          {% if form.business_name.errors %}<div class="text-danger small">{{ form.business_name.errors }}</div>{% endif %}
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-fl w-100" type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

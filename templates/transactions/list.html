@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">Transactions</h2>
+  <div class="text-muted mb-4">Your incoming and outgoing transactions.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Request</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Amount</th>
+              <th>Fee</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in transactions %}
+              <tr>
+                <td>#{{ t.id }}</td>
+                <td>#{{ t.float_request.id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ t.from_agent.user.username }}</div>
+                  <div class="text-muted small">Acct: {{ t.from_agent.vendor_number|default:"-" }}{% if t.from_agent.business_name %} · {{ t.from_agent.business_name }}{% endif %}</div>
+                </td>
+                <td>
+                  <div class="fw-semibold">{{ t.to_agent.user.username }}</div>
+                  <div class="text-muted small">Acct: {{ t.to_agent.vendor_number|default:"-" }}{% if t.to_agent.business_name %} · {{ t.to_agent.business_name }}{% endif %}</div>
+                </td>
+                <td>GHS {{ t.amount }}</td>
+                <td>GHS {{ t.service_fee }}</td>
+                <td><span class="badge bg-light text-dark border">{{ t.get_status_display }}</span></td>
+                <td><a class="btn btn-sm btn-fl-outline" href="{% url 'transactions:detail' t.id %}">View</a></td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="8" class="text-muted">No transactions yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

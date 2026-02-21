@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">Transaction Detail</h2>
+  <div class="text-muted mb-4">Full transaction information.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="text-muted small">Transaction ID</div>
+          <div class="fw-semibold">#{{ tx.id }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">Request</div>
+          <div class="fw-semibold">#{{ tx.float_request.id }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">From</div>
+          <div class="fw-semibold">{{ tx.from_agent.user.username }}</div>
+          <div class="text-muted small">Account number: {{ tx.from_agent.vendor_number|default:"-" }}{% if tx.from_agent.business_name %} · {{ tx.from_agent.business_name }}{% endif %}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">To</div>
+          <div class="fw-semibold">{{ tx.to_agent.user.username }}</div>
+          <div class="text-muted small">Account number: {{ tx.to_agent.vendor_number|default:"-" }}{% if tx.to_agent.business_name %} · {{ tx.to_agent.business_name }}{% endif %}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">Amount</div>
+          <div class="fw-semibold">GHS {{ tx.amount }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">Service fee</div>
+          <div class="fw-semibold">GHS {{ tx.service_fee }}</div>
+        </div>
+        <div class="col-md-6">
+          <div class="text-muted small">Status</div>
+          <div><span class="badge bg-light text-dark border">{{ tx.get_status_display }}</span></div>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <a class="btn btn-fl-outline" href="{% url 'transactions:list' %}">Back</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load dict_extras %}
+
+{% block content %}
+<div class="container py-4">
+  <h2 class="mb-1">Incoming Requests</h2>
+  <div class="text-muted mb-4">Requests sent to FloatLink will show here.</div>
+
+  <div class="card card-fl">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Requester</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="incomingTbody" data-latest-id="{% if requests %}{{ requests.0.id }}{% else %}0{% endif %}">
+            {% for r in requests %}
+              <tr>
+                <td>#{{ r.id }}</td>
+                <td>
+                  <div class="fw-semibold">{{ r.requesting_agent.user.username }}</div>
+                  <div class="text-muted small">Acct: {{ r.requesting_agent.vendor_number|default:"-" }}{% if r.requesting_agent.business_name %} · {{ r.requesting_agent.business_name }}{% endif %}</div>
+                </td>
+                <td>
+                  {% with rt=request_totals|get_item:r.id %}
+                    GHS {% if rt %}{{ rt.total_amount }}{% else %}{{ r.amount }}{% endif %}
+                  {% endwith %}
+                </td>
+                <td><span class="badge bg-light text-dark border">{{ r.get_status_display }}</span></td>
+                <td><a class="btn btn-sm btn-fl-outline" href="{% url 'float_requests:detail' r.id %}">Open</a></td>
+              </tr>
+            {% empty %}
+              <tr id="incomingEmptyRow"><td colspan="5" class="text-muted">No incoming requests.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

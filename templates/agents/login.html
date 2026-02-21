@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card card-fl">
+        <div class="card-body p-4">
+          <h3 class="mb-1">Login</h3>
+          <div class="text-muted mb-4">Access your FloatLink dashboard.</div>
+
+          <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input class="form-control" name="username" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input class="form-control" type="password" name="password" required>
+            </div>
+            <button class="btn btn-fl w-100" type="submit">Login</button>
+          </form>
+
+          <div class="text-muted small mt-3">
+            No account? <a href="{% url 'agents:register' %}">Register</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

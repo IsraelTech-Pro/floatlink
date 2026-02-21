@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <div>
+      <h2 class="mb-0">Dashboard</h2>
+      <div class="text-muted">Welcome back, {{ request.user.username }}.</div>
+    </div>
+    {% if not request.user.is_staff %}
+      <a class="btn btn-fl" href="{% url 'float_requests:create' %}">Request Float</a>
+    {% endif %}
+  </div>
+
+  {% if not request.user.agent.is_verified %}
+    <div class="alert alert-warning">
+      Your agent account is not verified yet. You can browse your profile, but you cannot request or accept float until an admin verifies you.
+    </div>
+  {% endif %}
+
+  <div class="row g-3">
+    {% if not request.user.is_staff %}
+      <div class="col-md-3">
+        <div class="card card-fl">
+          <div class="card-body">
+            <div class="text-muted small">Agent access</div>
+            <div class="fs-6 fw-semibold">Request only</div>
+            <div class="text-muted small mt-1">Limits: 100 - 10000 GHS</div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div class="col-md-3">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="text-muted small">My Requests</div>
+          <div class="fs-4 fw-bold">{{ my_requests_count }}</div>
+          <a class="stretched-link" href="{% url 'float_requests:my' %}"></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="text-muted small">Incoming</div>
+          <div class="fs-4 fw-bold">{{ incoming_count }}</div>
+          {% if request.user.is_staff %}
+            <a class="stretched-link" href="{% url 'core:staff_operations' %}"></a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card card-fl">
+        <div class="card-body">
+          <div class="text-muted small">Transactions</div>
+          <div class="fs-4 fw-bold">{{ tx_count }}</div>
+          <a class="stretched-link" href="{% url 'transactions:list' %}"></a>
+        </div>
+      </div>
+    </div>
+    {% if request.user.is_staff %}
+      <div class="col-md-3">
+        <div class="card card-fl">
+          <div class="card-body">
+            <div class="text-muted small">Analytics</div>
+            <div class="fs-4 fw-bold">View</div>
+            <a class="stretched-link" href="{% url 'core:staff_analytics' %}"></a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}
