@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 128 128" role="img" aria-label="FloatLink">
+  <defs>
+    <linearGradient id="flGold" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f7d77a"/>
+      <stop offset="0.5" stop-color="#d4af37"/>
+      <stop offset="1" stop-color="#b8891a"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="108" height="108" rx="26" fill="#0b0b0d" stroke="url(#flGold)" stroke-width="6"/>
+  <path d="M40 70c16-20 20-20 36 0" fill="none" stroke="url(#flGold)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M40 50c16-20 20-20 36 0" fill="none" stroke="url(#flGold)" stroke-width="8" stroke-linecap="round" opacity="0.85"/>
+  <circle cx="40" cy="70" r="6" fill="url(#flGold)"/>
+  <circle cx="76" cy="70" r="6" fill="url(#flGold)"/>
+</svg>
