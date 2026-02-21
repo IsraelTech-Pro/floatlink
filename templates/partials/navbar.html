@@ -9,7 +9,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="d-flex gap-2 ms-auto flex-nowrap order-lg-3">
+    <div class="d-none d-lg-flex gap-2 ms-auto flex-nowrap order-lg-3">
       {% if request.user.is_authenticated %}
         <a class="btn btn-sm btn-fl-outline" href="{% url 'agents:profile' %}">Profile</a>
         <a class="btn btn-sm btn-dark" href="{% url 'agents:logout' %}">Logout</a>
@@ -20,7 +20,7 @@
     </div>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <div class="d-flex align-items-center flex-nowrap w-100 overflow-auto" style="gap: .5rem;">
+      <div class="fl-nav-row d-flex align-items-center flex-nowrap w-100 overflow-auto" style="gap: .5rem;">
         <ul class="navbar-nav flex-row flex-nowrap mb-0" style="gap: .5rem;">
           <li class="nav-item"><a class="nav-link" href="{% url 'core:home' %}">Home</a></li>
           {% if request.user.is_authenticated %}
@@ -41,6 +41,16 @@
             <li class="nav-item"><a class="nav-link" href="{% url 'transactions:list' %}">Transactions</a></li>
           {% endif %}
         </ul>
+
+        <div class="d-flex d-lg-none gap-2 ms-2 flex-nowrap">
+          {% if request.user.is_authenticated %}
+            <a class="btn btn-sm btn-fl-outline" href="{% url 'agents:profile' %}">Profile</a>
+            <a class="btn btn-sm btn-dark" href="{% url 'agents:logout' %}">Logout</a>
+          {% else %}
+            <a class="btn btn-sm btn-fl-outline" href="{% url 'agents:login' %}">Login</a>
+            <a class="btn btn-sm btn-fl" href="{% url 'agents:register' %}">Register</a>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>

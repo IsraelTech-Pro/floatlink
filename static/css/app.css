@@ -23,6 +23,15 @@ body {
   opacity: 0.85;
 }
 
+.navbar-fl .navbar-collapse {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.navbar-fl .navbar-collapse .fl-nav-row {
+  -webkit-overflow-scrolling: touch;
+}
+
 .btn-fl {
   background: var(--fl-yellow);
   border: 1px solid var(--fl-yellow);
